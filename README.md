@@ -1,6 +1,14 @@
 # SPI-Library
 This library allows you to communicate with SPI devices, with the PIC18F45K22 as the controller device.
 
+## SPI_begin()
+
+Initializes the SPI bus by setting SCK and SDO as output. Apply default setting:
+- SPI_MASTER_OSC_DIV4
+- SPI_DATA_SAMPLE_MIDDLE
+- SPI_CLOCK_IDLE_LOW
+- SPI_IDLE_2_ACTIVE
+
 ## SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
 Please find the usage of above constants below:
 ## Spi_Type
