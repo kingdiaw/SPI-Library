@@ -29,12 +29,12 @@ unsigned char SPI_transfer(unsigned char txd)
 void SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
 {
     TRISCbits.TRISC5 = 0;       //SDO
-    if(sType & 0b00000100) //If Slave Mode
+    if(sType & 0b00000100)      //If Slave Mode
     {
         SSP1STAT = sTransmitEdge;
         TRISCbits.TRISC3 = 1;  //Salve:SCK as INPUT
     }
-    else              //If Master Mode
+    else                        //If Master Mode
     {
         SSP1STAT = sDataSample | sTransmitEdge;
         TRISCbits.TRISC3 = 0;   //Master:SCK as OUTPUT
@@ -42,23 +42,6 @@ void SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sCl
     SSP1ADD = 0x01;
     SSP1CON1 = sType | sClockIdle;
 }
-
-//void spiInit(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
-//{
-//    TRISCbits.TRISC5 = 0;
-//    if(sType & 0b00000100) //If Slave Mode
-//    {
-//        SSP1STAT = sTransmitEdge;
-//        TRISCbits.TRISC3 = 1;
-//    }
-//    else              //If Master Mode
-//    {
-//        SSP1STAT = sDataSample | sTransmitEdge;
-//        TRISCbits.TRISC3 = 0;
-//    }
-//    SSP1ADD = 0x01;
-//    SSP1CON1 = sType | sClockIdle;
-//}
 
 void SPI_end(void)
 {
