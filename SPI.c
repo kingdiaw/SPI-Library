@@ -6,23 +6,16 @@
 void SPI_begin(void){
     //SPI setup
     SPI_setting(SPI_MASTER_OSC_DIV4, SPI_DATA_SAMPLE_MIDDLE, SPI_CLOCK_IDLE_LOW, SPI_IDLE_2_ACTIVE);
-//    SSP1STAT = 0x40;
-//    SSP1CON1 = 0x00;		//0 = Idle state for clock is a low level
-//    SSP1ADD = 0x01;		
-//    TRISCbits.TRISC3 = 0;	//Synchronous serial clock input (SLAVE)/output (MASTER) for SPI mode
-//    SSP1CON1bits.SSPEN = 1;	//Enables serial port and configures SCKx, SDOx, SDIx and SSx as the source of the serial port pins(2)
-//    TRISCbits.TRISC5 = 0;   //SDO as OUTPUT
-//    TRISCbits.TRISC4 = 1;   //SDI as INPUT
 }
 
 unsigned char SPI_transfer(unsigned char txd)
 {
     uint8_t rxd=0;
-		SSPCON1bits.WCOL = 0;
-		if(SSPSTATbits.BF) rxd = SSPBUF;
-		SSPBUF = txd;
-		while(!SSPSTATbits.BF);
-		rxd = SSPBUF;
+		SSP1CON1bits.WCOL = 0;
+		if(SSP1STATbits.BF) rxd = SSP1BUF;
+		SSP1BUF = txd;
+		while(!SSP1STATbits.BF);
+		rxd = SSP1BUF;
 		return rxd;
 }
 
@@ -46,4 +39,29 @@ void SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sCl
 void SPI_end(void)
 {
     SSP1CON1bits.SSPEN = 0;
+}
+
+//Slave section
+static void SPI_receiveWait()
+{
+    while ( !SSP1STATbits.BF ); // Wait for Data Transmit/Receipt complete
+}
+
+void SPI_write(char dat)  //Write data to SPI bus
+{
+    SSP1BUF = dat;
+}
+
+unsigned char SPI_dataReady() //Check whether the data is ready to read
+{
+    if(SSP1STATbits.BF)
+        return 1;
+    else
+        return 0;
+}
+
+unsigned char SPI_read() //REad the received data
+{
+    SPI_receiveWait();        // wait until the all bits receive
+    return(SSP1BUF); // read the received data from the buffer
 }
