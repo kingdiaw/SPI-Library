@@ -5,7 +5,7 @@
 
 void SPI_begin(void){
     //SPI setup
-    spiInit(SPI_MASTER_OSC_DIV4, SPI_DATA_SAMPLE_MIDDLE, SPI_CLOCK_IDLE_LOW, SPI_IDLE_2_ACTIVE);
+    SPI_setting(SPI_MASTER_OSC_DIV4, SPI_DATA_SAMPLE_MIDDLE, SPI_CLOCK_IDLE_LOW, SPI_IDLE_2_ACTIVE);
 //    SSP1STAT = 0x40;
 //    SSP1CON1 = 0x00;		//0 = Idle state for clock is a low level
 //    SSP1ADD = 0x01;		
@@ -26,22 +26,39 @@ unsigned char SPI_transfer(unsigned char txd)
 		return rxd;
 }
 
-void spiInit(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
+void SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
 {
-    TRISCbits.TRISC5 = 0;
+    TRISCbits.TRISC5 = 0;       //SDO
     if(sType & 0b00000100) //If Slave Mode
     {
         SSP1STAT = sTransmitEdge;
-        TRISCbits.TRISC3 = 1;
+        TRISCbits.TRISC3 = 1;  //Salve:SCK as INPUT
     }
     else              //If Master Mode
     {
         SSP1STAT = sDataSample | sTransmitEdge;
-        TRISCbits.TRISC3 = 0;
+        TRISCbits.TRISC3 = 0;   //Master:SCK as OUTPUT
     }
     SSP1ADD = 0x01;
     SSP1CON1 = sType | sClockIdle;
 }
+
+//void spiInit(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
+//{
+//    TRISCbits.TRISC5 = 0;
+//    if(sType & 0b00000100) //If Slave Mode
+//    {
+//        SSP1STAT = sTransmitEdge;
+//        TRISCbits.TRISC3 = 1;
+//    }
+//    else              //If Master Mode
+//    {
+//        SSP1STAT = sDataSample | sTransmitEdge;
+//        TRISCbits.TRISC3 = 0;
+//    }
+//    SSP1ADD = 0x01;
+//    SSP1CON1 = sType | sClockIdle;
+//}
 
 void SPI_end(void)
 {
