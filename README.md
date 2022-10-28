@@ -1,7 +1,7 @@
 # SPI-Library
 This library allows you to communicate with SPI devices, with the PIC18F45K22 as the controller device.
 
-# SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
+## SPI_setting(Spi_Type sType, Spi_Data_Sample sDataSample, Spi_Clock_Idle sClockIdle, Spi_Transmit_Edge sTransmitEdge)
 ## Spi_Type
 - SPI_MASTER_OSC_DIV4 : To configure MSSP module as SPI Master with a clock of (Oscillator Frequency / 4).
 - SPI_MASTER_OSC_DIV16 : To configure MSSP module as SPI Master with a clock of (Oscillator Frequency / 16).
